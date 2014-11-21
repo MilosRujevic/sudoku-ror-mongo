@@ -1,0 +1,64 @@
+    <div class="container" id="wrapper">
+      <div class="row">
+          <div ng-repeat="row in rows" class="row-fluid  {[{ row.id | row_modulo_3 }]}">
+            <div class="controls controls-row">
+              <input ng-repeat="column in row.columns"
+                     class="span1 {[{ column.class }]} {[{check(row.id, column.id)}]} {[{ column.id | column_modulo_3 }]}"
+                     type="text" name="cell-{[{row.id}]}{[{column.id}]}"
+                     value="column.value" ng-model="column.value" type="number"
+                     ng-maxlength="1" required
+                     ng-click="possibilities(row.id, column.id)" ng-change="{[{ get_value(column.value, row.id, column.id) }]}">
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <!--<div class="row">-->
+    <!--<form name="sudokuGameBoard">-->
+    <!--<div class="form-group">-->
+    <!--<input type="number" name="00" ng-model="value00"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--<input type="number" name="01" ng-model="value01"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--<input type="number" name="02" ng-model="value02"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+
+    <!--<input type="number" name="03" ng-model="value03"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--<input type="number" name="04" ng-model="value04"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--<input type="number" name="05" ng-model="value05"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+
+    <!--<input type="number" name="06" ng-model="value06"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--<input type="number" name="07" ng-model="value07"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--<input type="number" name="08" ng-model="value08"-->
+    <!--min="1" max="9" required>-->
+    <!--<span class="error" ng-show="sudokuGameBoard.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--<span class="error" ng-show="myForm.input.$error.required">-->
+    <!--Required!</span>-->
+    <!--<span class="error" ng-show="myForm.input.$error.number">-->
+    <!--Not valid number!</span>-->
+    <!--</div>-->
+
+    <!--</form>-->
+    <!--</div>-->
