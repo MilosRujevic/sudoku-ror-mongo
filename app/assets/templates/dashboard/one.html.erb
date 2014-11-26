@@ -1,13 +1,8 @@
     <div class="container" id="wrapper">
       <div class="row">
-          <div ng-repeat="row in rows" class="row-fluid  {[{ row.id | row_modulo_3 }]}">
+          <div class="row-fluid">
             <div class="controls controls-row">
-              <input ng-repeat="column in row.columns"
-                     class="span1 {[{ column.class }]} {[{check(row.id, column.id)}]} {[{ column.id | column_modulo_3 }]}"
-                     type="text" name="cell-{[{row.id}]}{[{column.id}]}"
-                     value="column.value" ng-model="column.value" type="number"
-                     ng-maxlength="1" required
-                     ng-click="possibilities(row.id, column.id)" ng-change="{[{ get_value(column.value, row.id, column.id) }]}">
+
             </div>
           </div>
       </div>
