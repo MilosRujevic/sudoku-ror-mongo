@@ -1,0 +1,8 @@
+
+  <div class="small-12 small-centered medium-6 medium-centered large-5 columns end hero-inner">
+	<%= form_for @game do |f| %>
+	    <%= f.text_field :player_name, placeholder: 'PLAYER NAME' %>
+	    <%= f.number_field :level, placeholder: 'LEVEL' %>
+	    <%= f.submit "START", class: "button radius success expand" %>
+	<% end %>
+  </div>

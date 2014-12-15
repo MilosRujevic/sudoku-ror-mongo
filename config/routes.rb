@@ -1,16 +1,15 @@
 Rails.application.routes.draw do
-  devise_for :users
+  root 'games#new'
+  resources :games
+
+  # root 'application#index'
+  # get '*path' => 'application#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-    
 
-    mount Sudoku::API => '/api'
+  # You can have the root of your site routed with "root"
+  # root 'welcome#index'
 
-    get "*path.html" => "application#index", :layout => 0
-    get "*path" => "application#index"
-
-
-    root 'application#index'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

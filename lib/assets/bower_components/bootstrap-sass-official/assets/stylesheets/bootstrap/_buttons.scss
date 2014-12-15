@@ -34,7 +34,6 @@
   &.focus {
     color: $btn-default-color;
     text-decoration: none;
-    background-color: #ffffff;
   }
 
   &:active,
@@ -109,7 +108,7 @@
   &:focus {
     color: $link-hover-color;
     text-decoration: underline;
-    background-color: none;
+    background-color: transparent;
   }
   &[disabled],
   fieldset[disabled] & {

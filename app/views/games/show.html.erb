@@ -1,0 +1,31 @@
+<div class="small-centered columns end hero-inner">
+	<div class="row">
+		<div class="small-6 columns">
+			<span class="button radius info">Player <%= @game.player_name %></span>
+		</div>
+		<div class="small-6 columns">
+			<span class="button radius warning expand">SUBMIT</span>
+		</div>
+		<div class="small-4 columns">
+			<span class="button radius info expand">Level <%= @game.level %></span>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+			<% @game.puzzle[:sudoku].each do |cell| %>
+				<% if cell==0 %>
+				<div class="small-2 columns">
+			    	<input type="text" placeholder="<%= cell %>" maxlength="1"/>
+			    </div>
+				<% else %>
+				<div class="small-2 columns">
+			    	<input type="text" placeholder="<%= cell %>" maxlength="1" disabled/>
+			    </div>
+			    <% end %>
+			<%end%>
+	</div>
+<!-- 	<h1>SOLUTION: </h1>
+	<% @game.puzzle[:solution].each do |cell| %>
+	    <strong><%= cell %></strong>
+	<%end%> -->
+</div>
