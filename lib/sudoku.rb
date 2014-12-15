@@ -1,25 +1,23 @@
-class Sudoku
-  
+class Sudoku  
   @mreza = []
   #inicalizuj mrezu
   def initialize(mreza_string = "", nivo)
-    
     if mreza_string != ""
       @mreza = mreza_string.split("").map { |str| str.to_i }
-      
+
       raise Exception if !validno?
     else
       until validno?
         generisi
       end
       
-      until (ocigledni.length <= 5) && (pogodci <= nivo)
+      until (ocigledni.length <= 17) && (pogodci <= nivo)
         
         kopiraj = self.dup
         
         known = (0...81).to_a - nepoznati
         cell = known.sample
-        
+
         kopiraj.povuci_mrezu[cell] = 0
         kopiraj.povuci_mrezu[drugacije_of(cell)] = 0
 
@@ -38,7 +36,7 @@ class Sudoku
     end
     
     kopiraj = self.dup
-    kopiraj.solve!
+    kopiraj.resi!
     
     return kopiraj.reseno?
   end
@@ -48,7 +46,7 @@ class Sudoku
     return !@mreza.include?(0) && validno?
   end
   
-  def solve!
+  def resi!
     nepromenjeno = false
     imin = nil
     pmin = []
@@ -79,7 +77,7 @@ class Sudoku
       pmin.each do |guess|
         novo_kopiraj = dup
         novo_kopiraj[red_of(imin), kolona_of(imin)] = guess
-        novo_kopiraj.solve!
+        novo_kopiraj.resi!
         if novo_kopiraj.reseno?
           resenja.push(novo_kopiraj.povuci_mrezu)
           if resenja.uniq.length > 1
@@ -236,9 +234,3 @@ class Sudoku
 end
 
 
-p = Sudoku.new(40)
-p2 = Sudoku.new(80)
-p3 = Sudoku.new(60)
-puts p
-puts p2
-puts p3
