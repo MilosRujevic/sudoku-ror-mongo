@@ -1,156 +1,244 @@
-module Sudoku
-  class Puzzle
-    interno = ".123456789"
-    eksterno = "\000\001\002\003\004\005\006\007\010\011"
-
-    def initialize(lines)
-      if (lines.respond_to? :join)
-        s = lines.join
-      else
-        s = lines.dup
+class Sudoku
+  
+  @mreza = []
+  #inicalizuj mrezu
+  def initialize(mreza_string = "", nivo)
+    
+    if mreza_string != ""
+      @mreza = mreza_string.split("").map { |str| str.to_i }
+      
+      raise Exception if !validno?
+    else
+      until validno?
+        generisi
       end
+      
+      until (ocigledni.length <= 5) && (pogodci <= nivo)
+        
+        kopiraj = self.dup
+        
+        known = (0...81).to_a - nepoznati
+        cell = known.sample
+        
+        kopiraj.povuci_mrezu[cell] = 0
+        kopiraj.povuci_mrezu[drugacije_of(cell)] = 0
 
-      s.gsub!(/\s/, "")
-
-      "Pogresna velicina" unless s.size == 81
-
-      if i = s.index(/[^123456789\.]/)
-        raise Invalid, "Pogresan karakter #{s[i,1]}"
-      end
-
-      s.tr!(interno, externo)
-      @grid = s.unpack('c*')
-      raise Invalid, "Postoje duplikati" if has_duplicates?
-    end
-
-    def to_s
-      (0..8).collect{|r| @grid[r*9,9].pack('c9')}.join("\n").tr(externo,interno)
-    end
-
-    def dup
-      copy = super
-      @grid = @grid.dup
-      copy
-    end
-
-    def [](row, col)
-      @grid[row*9 + col]
-    end
-
-    def []=(row, col, newvalue)
-      unless (0..9).include? newvalue
-        raise Invalid, "Pogresna vrednost u celiji"
-      end
-      @grid[row*9 + col] = newvalue
-    end
-
-    BoxOfIndex = [
-        0,0,0,1,1,1,2,2,2,0,0,0,1,1,1,2,2,2,0,0,0,1,1,1,2,2,2,
-        3,3,3,4,4,4,5,5,5,3,3,3,4,4,4,5,5,5,3,3,3,4,4,4,5,5,5,
-        6,6,6,7,7,7,8,8,8,6,6,6,7,7,7,8,8,8,6,6,6,7,7,7,8,8,8
-    ].freeze
-
-    def each_unknown
-      0.upto 8 do |col|
-        0.upto 8 do |col|
-          index = row*9+col
-          next if @grid[index] != 0
-          box = BoxOfIndex[index]
-          yield row, col, box
+        
+        if kopiraj.resivo?
+          @mreza = kopiraj.povuci_mrezu
         end
       end
     end
+  end
+  #da li je moguce resiti 
+  def resivo?
+    
+    if pogodci < 17
+      return false
+    end
+    
+    kopiraj = self.dup
+    kopiraj.solve!
+    
+    return kopiraj.reseno?
+  end
 
-    def has_duplicates?
-      0.upto(8) {|row| return true if rowdigits(row).uniq! }
-      0.upto(8) {|col| return true if coldigits(col).uniq! }
-      0.upto(8) {|box| return true if boxdigits(box).uniq! }
-      false
+  #reseno 
+  def reseno?
+    return !@mreza.include?(0) && validno?
+  end
+  
+  def solve!
+    nepromenjeno = false
+    imin = nil
+    pmin = []
+    min = 10
+    
+    until(nepromenjeno)
+      
+      nepromenjeno = true
+      
+      nepoznati.each do |i|
+        moguci = moguci(red_of(i), kolona_of(i))
+      
+        if(moguci.length == 1)
+          self[red_of(i), kolona_of(i)] = moguci[0]
+          nepromenjeno = false
+        else
+          if nepromenjeno && (moguci.length < min)
+            imin = i
+            pmin = moguci
+            min = pmin.length
+          end
+        end
+      end
+    end
+    
+    unless self.reseno?
+      resenja = []
+      pmin.each do |guess|
+        novo_kopiraj = dup
+        novo_kopiraj[red_of(imin), kolona_of(imin)] = guess
+        novo_kopiraj.solve!
+        if novo_kopiraj.reseno?
+          resenja.push(novo_kopiraj.povuci_mrezu)
+          if resenja.uniq.length > 1
+            return false
+          end
+        end
+      end
+      
+      if ((resenja.length != 0) && (resenja.uniq.length == 1))
+        @mreza = resenja[0]
+      end
+    end
+  end
+  
+  def dup
+    kopiraj = super
+    @mreza = @mreza.dup
+    return kopiraj
+  end
+  
+  def [](red, kolona)
+    return @mreza[red*9 + kolona]
+  end
+  
+  def []=(red, kolona, novoval)
+    @mreza[red*9 + kolona] = novoval
+  end
+  
+  def to_s
+    return @mreza.join("")
+  end
+  
+  #metod koji vraca mrezu
+  def povuci_mrezu
+    return @mreza
+  end
+  
+  private
+  
+    #metoda za genereisanje svih brojeva
+    def generisi
+      @mreza = [0] * 81
+    
+      0.upto 8 do |red|
+        0.upto 8 do |kolona|
+          @mreza[red*9 + kolona] = moguci(red, kolona).sample
+        end
+      end
+    end
+  
+    #moguci brojevi
+    def moguci(red, kolona)
+      return [1,2,3,4,5,6,7,8,9] - (brojeviReda(red) + brojeviKolona(kolona) + brojeviKutija(kutija_of(red, kolona)))
+    end
+    
+    def nepoznati
+      return @mreza.each_index.select { |i| @mreza[i] == 0 }
+    end
+    
+    def ocigledni
+      return nepoznati.select { |i| moguci(red_of(i), kolona_of(i)).length == 1 }
+    end
+    
+    def validno?
+      return false unless @mreza
+      
+      return false unless @mreza.length == 81
+      
+      @mreza.each do |val|
+        return false unless val
+
+        if (val < 0) || (val > 9)
+          return false
+        end
+      end
+
+      return !ima_duplikata
     end
 
-    AllDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9].freeze
+    def ima_duplikata
+      0.upto(8) do |i|
+        if brojeviReda(i).uniq.length != brojeviReda(i).length
+          return true
+        elsif brojeviKolona(i).uniq.length != brojeviKolona(i).length
+          return true
+        elsif brojeviKutija(i).uniq.length != brojeviKutija(i).length
+          return true
+        end
+      end
 
-    def possible(row, col, box)
-      AllDigits - (rowdigits(row) + coldigits(col) + boxdigits(box))
+      return false
     end
-
-    def rowdigits(row)
-      @grid[row*9,9] - [0]
+    
+    def drugacije_of(cell)
+      red = 8 - red_of(cell)
+      kolona = 8 - kolona_of(cell)
+      
+      return red * 9 + kolona
     end
-
-    def coldigits(col)
+    
+    def pogodci
+      return @mreza.count do |h|
+        h != 0
+      end
+    end
+    
+    #oznaci kutiju 
+    def kutija_of(red, kolona)
+    
+      pokazuje = [0,0,0,1,1,1,2,2,2]*3 + [3,3,3,4,4,4,5,5,5]*3 + [6,6,6,7,7,7,8,8,8]*3
+    
+      return pokazuje[red * 9 + kolona]
+    end
+  
+    def red_of(index)
+      pokazuje = [0]*9 + [1]*9 + [2]*9 + [3]*9 + [4]*9 + [5]*9 + [6]*9 + [7]*9 + [8]*9
+    
+      return pokazuje[index]
+    end
+  
+    def kolona_of(index)
+      pokazuje = [0,1,2,3,4,5,6,7,8]*9
+    
+      return pokazuje[index]
+    end
+  
+    #mapiranje brojeva 
+    def brojeviReda(red)
+      @mreza[red*9, 9] - [0]
+    end
+  
+    def brojeviKolona(kolona)
       result = []
-      col.step(80,90) {|i|
-        v = @grid[i]
+      kolona.step(80, 9) do |i|
+        v = @mreza[i]
         result << v if (v != 0)
-      }
-      result
+      end
+    
+      return result
     end
-
-    BoxOfIndex = [0, 3, 6, 27, 30, 33, 54, 57, 60].freeze
-
-    def boxdigits(b)
-      i = BoxOfIndex[b]
+    # prvi inex u svakoj kutiji 0, 3, 6, 27, 30, 33, 54, 57, 60
+    def brojeviKutija(kutija)
+      kutijaes_pokazuje = [0, 3, 6, 27, 30, 33, 54, 57, 60]
+    
+      i = kutijaes_pokazuje[kutija]
+    
       [
-          @grid[i], @grid[i+1], @grid[i+2],
-          @grid[i+9], @grid[i+10], @grid[i+11],
-          @grid[i+18], @grid[i+19], @grid[i+20]
+        @mreza[i],     @mreza[i+1],   @mreza[i+2],
+        @mreza[i+9],   @mreza[i+10],  @mreza[i+11],
+        @mreza[i+18],  @mreza[i+19],  @mreza[i+20]
       ] - [0]
     end
-  end
-
-  class Invalidno < StandardError
-  end
-
-  class Nemoguce < StandardError
-  end
-
-  def Sudoku.scan(puzzle)
-    unchanged = false
-
-    until unchanged
-      unchanged = true
-      rmin, cmin, pmin = nil
-      min = 10
-
-      puzzle.each_unknown do |row, col, box|
-        p = puzzle.possible(row, col, box)
-
-        case p.size
-          when 0
-            raise Nemoguce
-          when 1
-            puzzle[row,col] = p [0]
-            unchanged = false
-          else
-            if unchanged && p.size < min
-              min = p.size
-              rmin, cmin, pmin = row, col, p
-            end
-        end
-      end
-    end
-
-    return rmin, cmin, pmin
-  end
-
-  def Sudoku.solve(puzzle)
-    puzzle = puzzle.dup
-    r,c,p = scan(puzzle)
-
-    return puzzle if r == nil
-
-    p.each do |guess|
-      puzzle[r,c] = guess
-
-      begin
-        return solve(puzzle)
-      rescue Impossible
-        next
-      end
-    end
-
-    raise Impossible
-  end
+  
 end
 
+
+p = Sudoku.new(40)
+p2 = Sudoku.new(80)
+p3 = Sudoku.new(60)
+puts p
+puts p2
+puts p3
