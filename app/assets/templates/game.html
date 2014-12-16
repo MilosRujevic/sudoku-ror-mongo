@@ -1,0 +1,19 @@
+<div class="small-centered columns end hero-inner">
+	<div class="row">
+		<div class="small-12 columns">
+			<span class="button radius info">Player <%= @game.player_name %></span>
+		</div>
+		<div class="small-4 columns">
+			<span class="button radius info expand">Level <%= @game.level %></span>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<input class="small-2 columns" ng-repeat='cell in puzzle track by $index'  type="number" class="form-control" ng-model="puzzle[$index]">
+	</div>
+	<div class="row">
+		<div class="small-4 small-centered columns">
+			<button type="button" ng-click="checkSudoku()" class="button radius warning expand">SUBMIT</button>
+		</div>
+	</div>
+</div>

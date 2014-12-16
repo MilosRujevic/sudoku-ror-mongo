@@ -15,6 +15,13 @@
 //= require foundation
 //= require turbolinks
 //= require angular/angular
-//= require_tree .
+//= require angular-devise
+//= require angular-animate
+//= require angular-resource
+//= require angular-ui-router
+//= require angular-rails-templates
+//= require sudoku/app.js
+//= require_tree ./sudoku
+//= require_tree ../templates
 
 $(function(){ $(document).foundation(); });
