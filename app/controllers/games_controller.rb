@@ -12,6 +12,10 @@ class GamesController < ApplicationController
     respond_with(@game)
   end
 
+  def check_answer
+    
+  end
+
   def new
     @game = Game.new
     respond_with(@game)

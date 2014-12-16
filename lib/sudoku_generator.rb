@@ -138,7 +138,7 @@ class SudokuGenerator
 
   def level3
     l3 = sudokuArray
-    20.times{l3[rand(81)] = 0}
+    17.times{l3[rand(81)] = 0}
     l3
   end
 
