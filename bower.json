@@ -2,8 +2,14 @@
   "lib": {
     "name": "bower-rails generated lib assets",
     "dependencies": {
-      // "threex"      : "git@github.com:rharriso/threex.git",
-      // "gsvpano.js"  : "https://github.com/rharriso/GSVPano.js/blob/master/src/GSVPano.js"
+      "angular": "1.2.26",
+      "angular-devise": "latest",
+      "angular-resource": "1.2.26",
+      "angular-ui-router": "latest",
+      "angular-animate": "1.2.26",
+      "angular-bootstrap": "latest",
+      "bootstrap-sass-official": "latest",
+      "angular-sanitize": "1.2.26"
     }
   },
   "vendor": {

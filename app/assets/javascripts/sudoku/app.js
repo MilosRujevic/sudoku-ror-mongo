@@ -7,6 +7,7 @@
 			'ngAnimate',
 			'ngResource',
 			'ui.router',
+			'ui.bootstrap',
 			'templates'
 		])
 		.config(function ($sceProvider, $stateProvider, $urlRouterProvider, $locationProvider, AuthProvider) {

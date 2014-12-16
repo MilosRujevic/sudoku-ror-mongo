@@ -34,6 +34,11 @@
 			} else {
 				$state.go('winner-page');
 			}
+
 		}
+
+
+
+
 	}
 })();

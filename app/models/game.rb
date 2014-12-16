@@ -2,7 +2,6 @@ class Game
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  
   field :player_name
   field :level
   field :puzzle

@@ -1,0 +1,22 @@
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+
+$grid-columns: 18;
+$input-bg: #ddd;
+
+body {
+  padding-top: 70px;
+}
+*{
+	border-radius: 4px !important;
+}
+input, select {
+	background-color: rgb(236, 250, 114) !important;
+	border: 2px solid rgb(250, 128, 114) !important;
+}
+
+.btn-success {
+	background-color: rgb(140, 191, 114);
+	border: 4px solid rgb(43, 132, 43) !important;
+
+}

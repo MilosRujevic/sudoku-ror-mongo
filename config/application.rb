@@ -26,10 +26,7 @@ module SudokuApp
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
-  config.assets.paths << Rails.root.join("vendor","assets","bower_components")
-  config.assets.paths << Rails.root.join("vendor","assets","bower_components","bootstrap-sass-official","assets","fonts")
 
-  config.assets.precompile << %r(.*.(?:eot|svg|ttf|woff)$)
 
     # @see http://stackoverflow.com/questions/19098663/auto-loading-lib-files-in-rails-4
     config.autoload_paths += %W(#{config.root}/lib)
@@ -37,13 +34,13 @@ module SudokuApp
     # config.autoload_paths += Dir["#{config.root}/lib/**/"]
     # config.autoload_paths += Dir["#{config.root}/app/models/**/"]
 
-    # # Grape REST API Rack application support
-    # config.paths.add 'app/api', glob: '**/*.rb'
-    # config.autoload_paths += Dir["#{Rails.root}/app/api/*"]
-    # config.middleware.use(Rack::Config) do |env|
-    #   env['api.tilt.root'] = Rails.root.join 'app', 'views', 'api'
-    # end
-    # config.assets.paths << Rails.root.join('lib', 'assets', 'bower_components', 'bootstrap-sass-official', 'assets', 'stylesheets')
-    # config.assets.paths << Rails.root.join('lib', 'assets', 'bower_components', 'bootstrap-sass-official', 'assets', 'fonts')
+    # Grape REST API Rack application support
+    config.paths.add 'app/api', glob: '**/*.rb'
+    config.autoload_paths += Dir["#{Rails.root}/app/api/*"]
+    config.middleware.use(Rack::Config) do |env|
+      env['api.tilt.root'] = Rails.root.join 'app', 'views', 'api'
+    end
+    config.assets.paths << Rails.root.join('lib', 'assets', 'bower_components', 'bootstrap-sass-official', 'assets', 'stylesheets')
+    config.assets.paths << Rails.root.join('lib', 'assets', 'bower_components', 'bootstrap-sass-official', 'assets', 'fonts')
   end
 end

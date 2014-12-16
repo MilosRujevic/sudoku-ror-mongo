@@ -1,7 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show, :edit, :update, :destroy]
 
-  respond_to :html
 
   def index
     @games = Game.all
@@ -10,10 +9,6 @@ class GamesController < ApplicationController
 
   def show
     respond_with(@game)
-  end
-
-  def check_answer
-    
   end
 
   def new
