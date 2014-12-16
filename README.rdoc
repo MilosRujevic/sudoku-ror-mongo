@@ -2,6 +2,10 @@
 
 Make sure you have MongoDB on your local machine. 
 
-git clone git@github.com:MilosRujevic/sudoku-ror-spa-mongo.git
+git clone git@github.com:MilosRujevic/sudoku-ror-mongo.git
 
 cd to the root 
+
+run bundle install 
+
+run rails s
